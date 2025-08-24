@@ -19,10 +19,11 @@ app.get("/db-check", async (req, res) => {
     const [rows] = await pool.query("SELECT NOW() AS time");
     res.json({ success: true, dbTime: rows[0].time });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "DB connection failed", error: err.message });
+    console.error("DB connection failed:", err.message);
+    res.json({ success: false, message: "DB connection failed", error: err.message });
   }
 });
+
 
 // Use Routes
 app.use("/api/auth", authRoutes);
