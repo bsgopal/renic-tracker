@@ -12,6 +12,18 @@ const attendanceRoutes = require("./routes/attendance");
 const salaryRoutes = require("./routes/salary");
 const leaveRoutes = require("./routes/leaves");
 
+// ✅ Health Check Route
+const pool = require("./config/db"); // make sure your db.js exports mysql2 pool or connection
+app.get("/db-check", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT NOW() AS time");
+    res.json({ success: true, dbTime: rows[0].time });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "DB connection failed", error: err.message });
+  }
+});
+
 // Use Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/attendance", attendanceRoutes);
